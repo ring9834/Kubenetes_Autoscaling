@@ -1,5 +1,5 @@
 # Kubernetes with Pods Autoscaling/Rolling Updates
-Here we use MiniKube to illustrate the core use of Kubernetes with docker from basic to advanced usage. This example use Unbuntu Linux in a virtual machine as the envionment running Kubernetes.
+In this example, we use Minikube to demonstrate core Kubernetes functionalities with Docker, covering both basic and advanced usage. The environment is an Ubuntu Linux virtual machine running Kubernetes.
 
 ## Basic: Set Up the Kubernetes Environment on Ubuntu
 Update the System
