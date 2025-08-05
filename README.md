@@ -99,7 +99,8 @@ kubectl describe pod nginx-pod
 ```
 
 ## Basic: Expose the Pod with a Service
-A Service provides a stable endpoint to access Pods, enabling load balancing and discovery.Example: Expose the Nginx Pod using a ClusterIP Service.
+A Service provides a stable endpoint to access Pods, enabling load balancing and discovery.
+Example: Expose the Nginx Pod using a ClusterIP Service.
 
 Create a Service Manifest:
 ```sh
@@ -146,6 +147,7 @@ You should see the Nginx welcome page HTML.
 
 ## Intermediate: Scale with a Deployment
 A Deployment manages multiple Pod replicas, ensuring scalability and self-healing.
+
 Example: Replace the single Pod with a Deployment running 3 Nginx replicas.
 
 Create a Deployment Manifest:
@@ -200,6 +202,7 @@ kubectl get pods
 
 ## Intermediate: Expose Deployment Externally with NodePort
 Since Minikube doesn't support LoadBalancer services natively, we'll use a NodePort Service to expose the Deployment externally.
+
 Example: Expose the Nginx Deployment to external traffic.
 
 Create a NodePort Service Manifest:
@@ -247,6 +250,7 @@ curl http://192.168.49.2:30080
 
 ## Advanced: Configure Persistent Storage with PVC and PV
 A PersistentVolume (PV) and PersistentVolumeClaim (PVC) provide storage for stateful applications.
+
 Example: Add persistent storage to a Pod running Nginx.
 
 Create a PersistentVolume Manifest:
@@ -347,6 +351,7 @@ If the PVC is deleted, the PV might be retained or deleted based on its reclaim 
 
 ## Advanced: Implement Autoscaling with HPA
 A HorizontalPodAutoscaler (HPA) scales Pods based on resource usage.
+
 Example: Autoscale the Nginx Deployment based on CPU usage.
 
 Update Deployment with Resource Limits:
@@ -427,6 +432,7 @@ kubectl get hpa
 
 ## Advanced: Manage Configuration with ConfigMap and Secrets
 ConfigMaps and Secrets manage configuration and sensitive data.
+
 Example: Use a ConfigMap for Nginx configuration and a Secret for a password.
 
 Create a ConfigMap:
@@ -524,6 +530,7 @@ kubectl get pods
 
 ## Advanced: Rolling Updates and Rollbacks
 Deployments support rolling updates for zero-downtime updates and rollbacks to revert changes.
+
 Example: Update the Nginx image and rollback if needed.
 
 Update the Deployment:
