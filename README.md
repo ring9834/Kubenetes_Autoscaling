@@ -16,9 +16,13 @@ sudo usermod -aG docker $USER // add your current user to the Docker group so th
 ```
 
 Install Minikube:
+
 // download the latest version of Minikube for Linux (64-bit) using curl
+
 // -L: Follow redirects (in case the URL points to another location). 
+
 // -O: Write output to a file with the same name as in the URL (in this case, minikube-linux-amd64).
+
 ```sh
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
@@ -39,9 +43,13 @@ sudo apt install -y conntrack
 
 Start Minikube Cluster:
 visudo // to edit the sudoers file securely
+
 hh ALL=(ALL:ALL) ALL // Add the following line to grant hh sudo privileges
+
 // start a local Kubernetes cluster using Minikube with the Docker driver as the underlying virtualization method.
+
 // --driver=docker: Tells Minikube to use Docker as the container runtime (instead of VirtualBox, KVM, Hyper-V, etc.)
+
 ```sh
 minikube start --driver=docker
 ```
@@ -136,6 +144,7 @@ kubectl get services
 ```
 
 Test Access (from within the cluster):
+
 // create and run a temporary pod in a Kubernetes cluster, using the curlimages/curl image, and opens an interactive shell session inside it.
 ```sh
 kubectl run curl-pod --image=curlimages/curl --rm -it -- sh
@@ -400,6 +409,7 @@ kubectl apply -f deployment.yaml
 ```
 
 Create an HPA:
+
 // The HPA scales between 2 and 10 replicas if CPU usage exceeds 50%.
 ```sh
 kubectl autoscale deployment nginx-deployment --cpu-percent=50 --min=2 --max=10
@@ -411,6 +421,7 @@ kubectl get hpa
 ```
 
 Simulate Load:
+
 // The load generator simulates traffic to trigger scaling.
 
 // --image=busybox:Specifies the container image to use for the pod. Here, busybox is a lightweight image that includes a minimal set of Unix utilities. It’s commonly used for debugging or running simple commands in Kubernetes.
@@ -422,12 +433,14 @@ kubectl run load-generator --image=busybox --rm -it -- sh
 ```
 
 Inside the pod, run:
+
 // wget:A command-line tool to retrieve content from web servers via HTTP, HTTPS, or FTP. In this case, it’s used to make HTTP requests.
 ```sh
 while true; do wget -q -O- http://nginx-nodeport; done
 ```
 
 Monitor Scaling:
+
 // The metrics server (enabled earlier) provides CPU usage data.
 
 // -w (or --watch):Enables "watch" mode, which keeps the command running and updates the output in real-time whenever changes occur to the pods in the specified namespace.
@@ -448,6 +461,7 @@ nano configmap.yaml
 ```
 
 Add the following:
+
 // This ConfigMap, named nginx-config, stores an Nginx configuration file (nginx.conf) that can be mounted into a pod (nginx-deployment pods) or used as environment variables.
 
 // It allows you to decouple the Nginx configuration from the pod’s container image, making it easier to update the configuration without rebuilding the image.
