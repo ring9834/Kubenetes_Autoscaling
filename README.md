@@ -144,7 +144,7 @@ curl nginx-service
 ```
 You should see the Nginx welcome page HTML.
 
-## Intermediate: Expose the Pod with a Service
+## Intermediate: Scale with a Deployment
 A Deployment manages multiple Pod replicas, ensuring scalability and self-healing.
 Example: Replace the single Pod with a Deployment running 3 Nginx replicas.
 
