@@ -64,6 +64,7 @@ Now our environment is ready. Let's proceed with Kubernetes core functions.
 
 ## Basic: Deploy a Simple Pod
 A Pod is the smallest deployable unit in Kubernetes, running one or more containers.
+
 Example: Deploy a single Nginx container as a Pod.
 
 Create a Pod Manifest:
@@ -100,6 +101,7 @@ kubectl describe pod nginx-pod
 
 ## Basic: Expose the Pod with a Service
 A Service provides a stable endpoint to access Pods, enabling load balancing and discovery.
+
 Example: Expose the Nginx Pod using a ClusterIP Service.
 
 Create a Service Manifest:
@@ -410,8 +412,11 @@ kubectl get hpa
 
 Simulate Load:
 // The load generator simulates traffic to trigger scaling.
+
 // --image=busybox:Specifies the container image to use for the pod. Here, busybox is a lightweight image that includes a minimal set of Unix utilities. It’s commonly used for debugging or running simple commands in Kubernetes.
+
 // --rm:Automatically deletes the pod when the command or session exits. This ensures the pod is temporary and doesn’t persist in the cluster after you’re done, cleaning up resources.
+
 ```sh
 kubectl run load-generator --image=busybox --rm -it -- sh
 ```
@@ -424,7 +429,9 @@ while true; do wget -q -O- http://nginx-nodeport; done
 
 Monitor Scaling:
 // The metrics server (enabled earlier) provides CPU usage data.
+
 // -w (or --watch):Enables "watch" mode, which keeps the command running and updates the output in real-time whenever changes occur to the pods in the specified namespace.
+
 ```sh
 kubectl get pods -w
 kubectl get hpa
@@ -442,7 +449,9 @@ nano configmap.yaml
 
 Add the following:
 // This ConfigMap, named nginx-config, stores an Nginx configuration file (nginx.conf) that can be mounted into a pod (nginx-deployment pods) or used as environment variables.
+
 // It allows you to decouple the Nginx configuration from the pod’s container image, making it easier to update the configuration without rebuilding the image.
+
 ```sh
 apiVersion: v1
 kind: ConfigMap
@@ -534,7 +543,9 @@ Deployments support rolling updates for zero-downtime updates and rollbacks to r
 Example: Update the Nginx image and rollback if needed.
 
 Update the Deployment:
+
 // --record saves the command in the rollout history.
+
 ```sh
 kubectl set image deployment/nginx-deployment nginx=nginx:1.21 --record
 ```
@@ -550,14 +561,18 @@ kubectl rollout history deployment/nginx-deployment
 ```
 
 Simulate a Bad Update:
+
 // A bad update (nginx:bad) causes Pods to fail.
+
 ```sh
 kubectl set image deployment/nginx-deployment nginx=nginx:bad --record
 kubectl rollout status deployment/nginx-deployment
 ```
 
 Rollback to Previous Version:
+
 // rollout undo reverts to the previous working version.
+
 ```sh
 kubectl rollout undo deployment/nginx-deployment
 kubectl get pods
