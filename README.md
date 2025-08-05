@@ -1,5 +1,5 @@
 # Kubernetes with Pods Autoscaling/Rolling Updates
-Here we use MiniKube to illustrate the core use of Kubernetes with docker from basic to advanced usage. This example use Unbuntu Linux in a virtual machine as the envionment running Kubernetes.
+In this example, we use Minikube to demonstrate core Kubernetes functionalities with Docker, covering both basic and advanced usage. The environment is an Ubuntu Linux virtual machine running Kubernetes.
 
 ## Basic: Set Up the Kubernetes Environment on Ubuntu
 Update the System
@@ -16,9 +16,13 @@ sudo usermod -aG docker $USER // add your current user to the Docker group so th
 ```
 
 Install Minikube:
+
 // download the latest version of Minikube for Linux (64-bit) using curl
+
 // -L: Follow redirects (in case the URL points to another location). 
+
 // -O: Write output to a file with the same name as in the URL (in this case, minikube-linux-amd64).
+
 ```sh
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
@@ -39,9 +43,13 @@ sudo apt install -y conntrack
 
 Start Minikube Cluster:
 visudo // to edit the sudoers file securely
+
 hh ALL=(ALL:ALL) ALL // Add the following line to grant hh sudo privileges
+
 // start a local Kubernetes cluster using Minikube with the Docker driver as the underlying virtualization method.
+
 // --driver=docker: Tells Minikube to use Docker as the container runtime (instead of VirtualBox, KVM, Hyper-V, etc.)
+
 ```sh
 minikube start --driver=docker
 ```
@@ -64,6 +72,7 @@ Now our environment is ready. Let's proceed with Kubernetes core functions.
 
 ## Basic: Deploy a Simple Pod
 A Pod is the smallest deployable unit in Kubernetes, running one or more containers.
+
 Example: Deploy a single Nginx container as a Pod.
 
 Create a Pod Manifest:
@@ -99,7 +108,9 @@ kubectl describe pod nginx-pod
 ```
 
 ## Basic: Expose the Pod with a Service
-A Service provides a stable endpoint to access Pods, enabling load balancing and discovery.Example: Expose the Nginx Pod using a ClusterIP Service.
+A Service provides a stable endpoint to access Pods, enabling load balancing and discovery.
+
+Example: Expose the Nginx Pod using a ClusterIP Service.
 
 Create a Service Manifest:
 ```sh
@@ -133,6 +144,7 @@ kubectl get services
 ```
 
 Test Access (from within the cluster):
+
 // create and run a temporary pod in a Kubernetes cluster, using the curlimages/curl image, and opens an interactive shell session inside it.
 ```sh
 kubectl run curl-pod --image=curlimages/curl --rm -it -- sh
@@ -144,8 +156,9 @@ curl nginx-service
 ```
 You should see the Nginx welcome page HTML.
 
-## Intermediate: Expose the Pod with a Service
+## Intermediate: Scale with a Deployment
 A Deployment manages multiple Pod replicas, ensuring scalability and self-healing.
+
 Example: Replace the single Pod with a Deployment running 3 Nginx replicas.
 
 Create a Deployment Manifest:
@@ -200,6 +213,7 @@ kubectl get pods
 
 ## Intermediate: Expose Deployment Externally with NodePort
 Since Minikube doesn't support LoadBalancer services natively, we'll use a NodePort Service to expose the Deployment externally.
+
 Example: Expose the Nginx Deployment to external traffic.
 
 Create a NodePort Service Manifest:
@@ -247,6 +261,7 @@ curl http://192.168.49.2:30080
 
 ## Advanced: Configure Persistent Storage with PVC and PV
 A PersistentVolume (PV) and PersistentVolumeClaim (PVC) provide storage for stateful applications.
+
 Example: Add persistent storage to a Pod running Nginx.
 
 Create a PersistentVolume Manifest:
@@ -347,6 +362,7 @@ If the PVC is deleted, the PV might be retained or deleted based on its reclaim 
 
 ## Advanced: Implement Autoscaling with HPA
 A HorizontalPodAutoscaler (HPA) scales Pods based on resource usage.
+
 Example: Autoscale the Nginx Deployment based on CPU usage.
 
 Update Deployment with Resource Limits:
@@ -393,6 +409,7 @@ kubectl apply -f deployment.yaml
 ```
 
 Create an HPA:
+
 // The HPA scales between 2 and 10 replicas if CPU usage exceeds 50%.
 ```sh
 kubectl autoscale deployment nginx-deployment --cpu-percent=50 --min=2 --max=10
@@ -404,22 +421,30 @@ kubectl get hpa
 ```
 
 Simulate Load:
+
 // The load generator simulates traffic to trigger scaling.
+
 // --image=busybox:Specifies the container image to use for the pod. Here, busybox is a lightweight image that includes a minimal set of Unix utilities. It’s commonly used for debugging or running simple commands in Kubernetes.
+
 // --rm:Automatically deletes the pod when the command or session exits. This ensures the pod is temporary and doesn’t persist in the cluster after you’re done, cleaning up resources.
+
 ```sh
 kubectl run load-generator --image=busybox --rm -it -- sh
 ```
 
 Inside the pod, run:
+
 // wget:A command-line tool to retrieve content from web servers via HTTP, HTTPS, or FTP. In this case, it’s used to make HTTP requests.
 ```sh
 while true; do wget -q -O- http://nginx-nodeport; done
 ```
 
 Monitor Scaling:
+
 // The metrics server (enabled earlier) provides CPU usage data.
+
 // -w (or --watch):Enables "watch" mode, which keeps the command running and updates the output in real-time whenever changes occur to the pods in the specified namespace.
+
 ```sh
 kubectl get pods -w
 kubectl get hpa
@@ -427,6 +452,7 @@ kubectl get hpa
 
 ## Advanced: Manage Configuration with ConfigMap and Secrets
 ConfigMaps and Secrets manage configuration and sensitive data.
+
 Example: Use a ConfigMap for Nginx configuration and a Secret for a password.
 
 Create a ConfigMap:
@@ -435,8 +461,11 @@ nano configmap.yaml
 ```
 
 Add the following:
+
 // This ConfigMap, named nginx-config, stores an Nginx configuration file (nginx.conf) that can be mounted into a pod (nginx-deployment pods) or used as environment variables.
+
 // It allows you to decouple the Nginx configuration from the pod’s container image, making it easier to update the configuration without rebuilding the image.
+
 ```sh
 apiVersion: v1
 kind: ConfigMap
@@ -524,10 +553,13 @@ kubectl get pods
 
 ## Advanced: Rolling Updates and Rollbacks
 Deployments support rolling updates for zero-downtime updates and rollbacks to revert changes.
+
 Example: Update the Nginx image and rollback if needed.
 
 Update the Deployment:
+
 // --record saves the command in the rollout history.
+
 ```sh
 kubectl set image deployment/nginx-deployment nginx=nginx:1.21 --record
 ```
@@ -543,14 +575,18 @@ kubectl rollout history deployment/nginx-deployment
 ```
 
 Simulate a Bad Update:
+
 // A bad update (nginx:bad) causes Pods to fail.
+
 ```sh
 kubectl set image deployment/nginx-deployment nginx=nginx:bad --record
 kubectl rollout status deployment/nginx-deployment
 ```
 
 Rollback to Previous Version:
+
 // rollout undo reverts to the previous working version.
+
 ```sh
 kubectl rollout undo deployment/nginx-deployment
 kubectl get pods
