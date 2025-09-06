@@ -45,9 +45,10 @@ Start Minikube Cluster:
 
 visudo // to edit the sudoers file securely
 
-hh ALL=(ALL:ALL) ALL // Add the following line to grant hh sudo privileges
+hh ALL=(ALL:ALL) ALL // Add this line to grant hh sudo privileges
 
 // start a local Kubernetes cluster using Minikube with the Docker driver as the underlying virtualization method.
+
 // --driver=docker: Tells Minikube to use Docker as the container runtime (instead of VirtualBox, KVM, Hyper-V, etc.)
 
 ```sh
