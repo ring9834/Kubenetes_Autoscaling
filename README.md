@@ -283,11 +283,14 @@ spec:
     - ReadWriteOnce
   hostPath:
 path: "/mnt/data"
-
+```
 Create a PersistentVolumeClaim Manifest:
+```sh
 nano pvc.yaml
+```
 
 Add the following:
+```sh
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
